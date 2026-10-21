@@ -1,1 +1,36 @@
+const keys = [
+  'UYN-8ZQD-SC64-3SYF-WV32',
+  'UYN-4MY5-QTF4-L68A-SASQ'
+];
 
+function randomKey() {
+  let used = JSON.parse(localStorage.getItem('usedKeys') || '[]');
+  const available = keys.filter(key => !used.includes(key));
+
+  if (available.length === 0) {
+    document.getElementById('key').textContent =
+      'Đã hết key!';
+    return;
+  }
+
+  const index = Math.floor(Math.random() * available.length);
+  const key = available[index];
+
+  used.push(key);
+  localStorage.setItem('usedKeys', JSON.stringify(used));
+
+  document.getElementById('key').textContent = key;
+}
+
+function copyKey() {
+  const key = document.getElementById('key').textContent;
+
+  if (!keys.includes(key)) {
+    alert('Hãy nhận key trước!');
+    return;
+  }
+
+  navigator.clipboard.writeText(key)
+    .then(() => alert('Đã sao chép key!'))
+    .catch(() => alert('Hãy sao chép key thủ công.'));
+}
